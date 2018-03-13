@@ -15,6 +15,7 @@ namespace Ticketing
         int mSection = 2;
         int mQuantity = 0;
         bool mDiscount = false;
+        bool mChildDiscount = false;
 
         public TicketsForm()
         {
@@ -26,12 +27,24 @@ namespace Ticketing
 
         }
 
-        private void cmdCalculate_Click(object sender, EventArgs e)
+        private async void cmdCalculate_Click(object sender, EventArgs e)
         {
             mQuantity = int.Parse(txtQuantity.Text);
 
+            if (chkDiscount.Checked && chkChild.Checked)
+            {
+                lblError.Text = "You can only have one discount";
+                return;
+            }
+            lblError.Text = "";
             if (chkDiscount.Checked)
-                { mDiscount = true; }
+            {
+                mDiscount = true;
+            }
+            else if (chkChild.Checked)
+            {
+                mChildDiscount = true;
+            }
 
             if (radBalcony.Checked)
                 { mSection = 1; }
@@ -45,5 +58,6 @@ namespace Ticketing
             mTicketPrice.calculatePrice();
             lblAmount.Text = System.Convert.ToString(mTicketPrice.AmountDue);
         }
-     }
+
+    }
 }
